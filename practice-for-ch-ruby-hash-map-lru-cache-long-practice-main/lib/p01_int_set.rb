@@ -1,14 +1,21 @@
 class MaxIntSet
+  attr_reader :store
   def initialize(max)
+    @store = Array.new(max, false)
   end
 
   def insert(num)
+    raise 'Out of bounds' if num < 0 || num > @store.length
+    @store[num] = true
   end
 
   def remove(num)
+    @store[num] = false
   end
 
   def include?(num)
+    return true if @store[num] == true
+    false
   end
 
   private
@@ -26,18 +33,23 @@ class IntSet
   end
 
   def insert(num)
+    self[num] << num unless self.include?(num)
   end
 
   def remove(num)
+    self[num].delete(num) if self.include?(num)
   end
 
   def include?(num)
+    return true if self[num].include?(num)
+    false
   end
 
   private
 
   def [](num)
     # optional but useful; return the bucket corresponding to `num`
+    return @store[num % self.num_buckets]
   end
 
   def num_buckets
